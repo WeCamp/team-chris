@@ -4,36 +4,44 @@ body, html {
 }
 
 #site-wrapper {
-	dispay: block;
-	position: relative;
-	width: 100%;
-	background: red;
-}
-
-.map-wrapper {
 	display: block;
 	position: relative;
 	width: 100%;
-	min-height: 600px;
-	
+}
+
+#map-wrapper {
+	display: block;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	background-color: green;
 }
 
 #map {
 	display: block;
-	position: absolute;
+	position: relative;
 	width: 100%;
 	height: 100%;
-	background-color: green;
-	top: 0px;
-	left: 0px;
 }
 
 #search-form {
 	display: block;
-	position: absolute;
+	position: fixed;
+	box-sizing: border-box;
 	width: 280px;
 	padding: 20px 15px;
 	background-color: white;
 	left: 50%;
 	margin-left: -140px;
+	top: 0px;
+}
+
+.gm-style .gm-style-iw + div {
+	display: none;
+}
+
+.gm-style .gm-style-iw > div {
+	padding-left: 20px;
 }
