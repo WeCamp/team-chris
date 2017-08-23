@@ -19,7 +19,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $db = new PDO('sqlite:../db/test.db');
+        $db = new PDO('sqlite:db/test.db');
         $this->placeId = uniqid();
         $this->app = new App($db);
     }
