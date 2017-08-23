@@ -41,11 +41,11 @@ composer install
 For installation, we need to consider some topics:
  - Firstly, install PHP 7.0 or 7.1
  - Secondly, install PHPUnit for testing proposes
- 
+
 Now, follow these steps:
  - Clone repository
  - composer install
- 
+
 ## Running the tests
 
 To run all tests of the app, execute these commands in the app directory.
@@ -65,11 +65,12 @@ phpunit
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
 
 ## Authors
 
 * **Midori Kocak** - [Midori Kocak](https://github.com/midorikocak)
+* **Paulo Moreno** - [Paulo Moreno](https://github.com/pcmoreno)
 
 ## License
 
