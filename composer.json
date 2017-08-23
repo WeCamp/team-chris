@@ -1,19 +1,33 @@
 {
-    "name": "wecamp/team-chris",
-    "description": "A nice LGBT friendly restaurants list that you can vote them based on their friendliness",
-    "type": "project",
-    "license": "MIT",
-    "repositories": [
-        {"type":"composer",
-         "url": "http://toran.weca.mp/repo/packagist"},
-        {"packagist": false}
-        ],
-    "config": {"secure-http": false },
-    "minimum-stability": "dev",
-    "require-dev": {
-        "phpunit/phpunit": "^6.4@dev"
+  "name": "wecamp/team-chris",
+  "description": "A nice LGBT friendly restaurants list that you can vote them based on their friendliness",
+  "type": "project",
+  "license": "MIT",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://toran.weca.mp/repo/packagist"
     },
-    "require": {
-        "slim/slim": "4.x-dev"
+    {
+      "packagist": false
     }
+  ],
+  "config": {
+    "secure-http": false
+  },
+  "minimum-stability": "dev",
+  "require-dev": {
+    "phpunit/phpunit": "^6.4@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "TeamChris\\": "src/"
+    },
+    "psr-0": {
+      "TeamChrisTest\\": "tests/"
+    }
+  },
+  "require": {
+    "slim/slim": "4.x-dev"
+  }
 }
