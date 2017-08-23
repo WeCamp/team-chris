@@ -5,8 +5,7 @@ namespace TeamChrisTest;
 use PDO;
 use TeamChris\App;
 
-
-class AppTest extends \PHPUnit_Framework_TestCase
+class AppTest extends \PHPUnit\Framework\TestCase
 {
     private $placeIds;
     private $placeId;
