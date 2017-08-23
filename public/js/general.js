@@ -61,18 +61,30 @@ function Map(element) {
     var createMarker = function(place) {
 	    var image = {
 	        url: place.icon,
-	        size: new google.maps.Size(71, 71),
-	        origin: new google.maps.Point(0, 0),
-	        anchor: new google.maps.Point(17, 34),
-	        scaledSize: new google.maps.Size(25, 25)
+	        size: new google.maps.Size(25, 25),
+	        scaledSize: new google.maps.Size(25, 25),
 	    };
 	    var marker = new google.maps.Marker({
 		    map: googleMap,
 		    icon: image,
-		    title: place.name,
 		    position: place.geometry.location
 	    });
+	    addInfoWindow(place, marker);
     }
+
+    var addInfoWindow = function(place, marker) {
+    	var infoWindow = new google.maps.InfoWindow({
+	    	content: place.name
+	    });
+	    marker.addListener("mouseover", function() {
+	    	infoWindow.open(googleMap, marker);
+	    });
+	    marker.addListener("mouseout", function() {
+	    	infoWindow.close();
+	    });
+    };
+
+    var showInfoBox
 
 	var setLocationCallback = function(position) {
 		displayMap(position.coords.latitude, position.coords.longitude);
