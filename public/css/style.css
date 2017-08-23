@@ -1,0 +1,39 @@
+body, html {
+	margin: 0;
+	padding: 0;
+}
+
+#site-wrapper {
+	dispay: block;
+	position: relative;
+	width: 100%;
+	background: red;
+}
+
+.map-wrapper {
+	display: block;
+	position: relative;
+	width: 100%;
+	min-height: 600px;
+	
+}
+
+#map {
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: green;
+	top: 0px;
+	left: 0px;
+}
+
+#search-form {
+	display: block;
+	position: absolute;
+	width: 280px;
+	padding: 20px 15px;
+	background-color: white;
+	left: 50%;
+	margin-left: -140px;
+}
