@@ -23,7 +23,7 @@ class AppTest extends \PHPUnit\Framework\TestCase
         $this->app = new App($db);
     }
 
-    /*
+
     public function testRateANewPlace()
     {
         $response = $this->app->rateAPlace($this->placeId, 1);
@@ -64,7 +64,6 @@ class AppTest extends \PHPUnit\Framework\TestCase
             ]
         );
     }
-*/
 
     public function testOneExistentPlace()
     {
