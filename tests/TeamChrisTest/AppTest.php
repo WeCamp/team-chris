@@ -9,7 +9,7 @@ use TeamChris\App;
 class AppTest extends \PHPUnit_Framework_TestCase
 {
     private $placeIds;
-    private $placeId = 'ChIJM104iyQdhEcRmkCU__KtSCo';
+    private $placeId;
     private $rating = ['category' => 'LGBT', 'upAmount' => 0, 'downAmount' => 0];
 
     /**
@@ -19,13 +19,9 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $db = new PDO('sqlite:../db/test.db');
+        $db = new PDO('sqlite:db/test.db');
+        $this->placeId = uniqid();
         $this->app = new App($db);
-    }
-
-    public function testCheckPlaces()
-    {
-
     }
 
     public function testRateANewPlace()
@@ -34,6 +30,32 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $rating = $this->rating;
         $rating['upAmount']++;
         $this->assertEquals(['placeId' => $this->placeId, 'ratings' => [$rating]], $response);
+    }
+
+
+    public function testCheckPlaces()
+    {
+        $nonExistentId = uniqid();
+        $response = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => [$this->placeId, $nonExistentId]]);
+        $this->assertEquals($response,
+            [
+                [
+                    'placeId' => $this->placeId,
+                    'ratings' => [
+                        'category' => 'lgbt',
+                        'upAmount' => 1,
+                        'downAmount' => 0
+                    ]
+                ],
+                [
+                    'placeId' => $nonExistentId,
+                    'ratings' => [
+                        'category' => 'lgbt',
+                        'upAmount' => 0,
+                        'downAmount' => 0
+                    ]
+                ]
+            ]);
     }
 
     public function testRateAnExistingPlace()
