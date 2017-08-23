@@ -1,28 +1,86 @@
+var googleMap;
+
 function Map(element) {
-	var googleMap;
+	
+	var placesApi;
 	var element = element;
+	var defaultLocation = {
+		lat: -34.397,
+		lng: 150.644
+	}
 
 	this.initializeMap = function() {
-		googleMap = new google.maps.Map(element, {
-		  center: {lat: -34.397, lng: 150.644},
-		  zoom: 8
-		});
+		if (!navigator.geolocation) {
+	        displayMap(defaultLocation.lat, defaultLocation.lng);
+	        return;
+	    }
+
+	    navigator.geolocation.getCurrentPosition(setLocationCallback, geolocationFailedCallback);
 	};
+
+	var displayMap = function(lat, lng) {
+		googleMap = new google.maps.Map(element, {
+		    center: {lat: lat, lng: lng},
+		    zoom: 13
+		});
+		googleMap.addListener("bounds_changed", getBusinesses);
+	}
 
 	this.updateMap = function(address) {
 		var geocoder = new google.maps.Geocoder();
         geocoder.geocode({'address': address}, function(results, status) {
             if (status === 'OK') {
                 googleMap.setCenter(results[0].geometry.location);
-                var marker = new google.maps.Marker({
-	                map: googleMap,
-	                position: results[0].geometry.location
-            	});
             } else {
             	alert('Geocode was not successful for the following reason: ' + status);
           	}
         });
     }
+
+    var getBusinesses = function() {
+    	if (!placesApi) {
+    		placesApi = new google.maps.places.PlacesService(googleMap);
+    	}
+    	var request = {
+    		query: "",
+    		bounds: googleMap.getBounds(),
+    		type: "restaurant"
+    	};
+    	placesApi.textSearch(request, displayBusinesses);
+    };
+
+    var displayBusinesses = function(results, status) {
+		if (status == google.maps.places.PlacesServiceStatus.OK) {
+		    for (var i = 0; i < results.length; i++) {
+		        var place = results[i];
+		        createMarker(results[i]);
+		    }
+		}
+    };
+
+    var createMarker = function(place) {
+	    var image = {
+	        url: place.icon,
+	        size: new google.maps.Size(71, 71),
+	        origin: new google.maps.Point(0, 0),
+	        anchor: new google.maps.Point(17, 34),
+	        scaledSize: new google.maps.Size(25, 25)
+	    };
+	    var marker = new google.maps.Marker({
+		    map: googleMap,
+		    icon: image,
+		    title: place.name,
+		    position: place.geometry.location
+	    });
+    }
+
+	var setLocationCallback = function(position) {
+		displayMap(position.coords.latitude, position.coords.longitude);
+	};
+
+	var geolocationFailedCallback = function() {
+		displayMap(defaultLocation.lat, defaultLocation.lng);
+	};
 }
 
 function Search(map) {
