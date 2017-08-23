@@ -1,0 +1,19 @@
+{
+    "name": "wecamp/team-chris",
+    "description": "A nice LGBT friendly restaurants list that you can vote them based on their friendliness",
+    "type": "project",
+    "license": "MIT",
+    "repositories": [
+        {"type":"composer",
+         "url": "http://toran.weca.mp/repo/packagist"},
+        {"packagist": false}
+        ],
+    "config": {"secure-http": false },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^6.4@dev"
+    },
+    "require": {
+        "slim/slim": "4.x-dev"
+    }
+}
