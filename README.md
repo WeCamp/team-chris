@@ -69,6 +69,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
+* **Chris Hartjes** - [Chris Hartjes](https://grumpy-learning.com)
 * **Midori Kocak** - [Midori Kocak](https://github.com/midorikocak)
 * **Paulo Moreno** - [Paulo Moreno](https://github.com/pcmoreno)
 
