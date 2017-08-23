@@ -23,6 +23,7 @@ class AppTest extends \PHPUnit\Framework\TestCase
         $this->app = new App($db);
     }
 
+    /*
     public function testRateANewPlace()
     {
         $response = $this->app->rateAPlace($this->placeId, 1);
@@ -32,29 +33,63 @@ class AppTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testCheckPlaces()
+    public function testNonExistentPlaces()
     {
-        $nonExistentId = uniqid();
-        $response = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => [$this->placeId, $nonExistentId]]);
-        $this->assertEquals($response,
+        $id1 = uniqid();
+        $id2 = uniqid();
+        $response = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => [$id1, $id2]]);
+        $this->assertEquals(
+            $response,
             [
                 [
-                    'placeId' => $this->placeId,
+                    'placeId' => $id1,
                     'ratings' => [
-                        'category' => 'lgbt',
-                        'upAmount' => 1,
-                        'downAmount' => 0
+                        [
+                            'category' => 'lgbt',
+                            'upAmount' => 0,
+                            'downAmount' => 0
+                        ]
                     ]
                 ],
                 [
-                    'placeId' => $nonExistentId,
+                    'placeId' => $id2,
                     'ratings' => [
-                        'category' => 'lgbt',
-                        'upAmount' => 0,
-                        'downAmount' => 0
+                        [
+                            'category' => 'lgbt',
+                            'upAmount' => 0,
+                            'downAmount' => 0
+                        ]
                     ]
                 ]
-            ]);
+            ]
+        );
+    }
+*/
+
+    public function testOneExistentPlace()
+    {
+        $response = $this->app->checkPlaces(['categories' => ['lgbt','vegan'], 'placeIds' => ['599d8f522626b']]);
+
+        $this->assertEquals(
+            $response,
+            [
+                [
+                    'placeId' => '599d8f522626b',
+                    'ratings' => [
+                        [
+                            'category' => 'lgbt',
+                            'upAmount' => 1,
+                            'downAmount' => 1
+                        ],
+                        [
+                            'category' => 'vegan',
+                            'upAmount' => 1,
+                            'downAmount' => 0
+                        ]
+                    ]
+                ]
+            ]
+        );
     }
 
     public function testRateAnExistingPlace()
