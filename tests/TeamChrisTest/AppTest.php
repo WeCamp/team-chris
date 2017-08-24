@@ -11,16 +11,30 @@ class AppTest extends \PHPUnit\Framework\TestCase
     private $rating = ['category' => 'LGBT', 'upAmount' => 0, 'downAmount' => 0];
 
     /**
+     * @var PDO
+     */
+    private $db;
+
+    /**
      * @var App
      */
     private $app;
 
     protected function setUp()
     {
-        $db = new PDO('sqlite:db/test.db');
+        $this->db = new PDO('sqlite:db/test.db');
         $this->placeId = uniqid();
-        $this->app = new App($db);
+        $sql = file_get_contents('db/database.sql');
+        $this->db->exec($sql);
+
+        $this->app = new App($this->db);
     }
+
+    protected function tearDown()
+    {
+        $this->db->exec('DROP TABLE ratings');
+    }
+
 
     public function testRateANewPlace()
     {
@@ -36,7 +50,6 @@ class AppTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->app->getRating($response['id']));
     }
 
-
     public function testNonExistentPlaces()
     {
         $id1 = uniqid();
@@ -48,26 +61,29 @@ class AppTest extends \PHPUnit\Framework\TestCase
                 [
                     'placeId' => $id1,
                     'ratings' => [
-                        [
-                            'category' => 'lgbt',
-                            'upAmount' => 0,
-                            'downAmount' => 0
-                        ]
+                        'lgbt' =>
+                            [
+                                'category' => 'lgbt',
+                                'upAmount' => 0,
+                                'downAmount' => 0
+                            ]
                     ]
                 ],
                 [
                     'placeId' => $id2,
                     'ratings' => [
-                        [
-                            'category' => 'lgbt',
-                            'upAmount' => 0,
-                            'downAmount' => 0
-                        ]
+                        'lgbt' =>
+                            [
+                                'category' => 'lgbt',
+                                'upAmount' => 0,
+                                'downAmount' => 0
+                            ]
                     ]
                 ]
             ]
         );
     }
+
 
     public function testOneExistentPlace()
     {
@@ -80,17 +96,17 @@ class AppTest extends \PHPUnit\Framework\TestCase
                     'placeId' => '599d8f522626b',
                     'ratings' => [
                         'lgbt' =>
-                        [
-                            'category' => 'lgbt',
-                            'upAmount' => 1,
-                            'downAmount' => 1
-                        ],
+                            [
+                                'category' => 'lgbt',
+                                'upAmount' => 1,
+                                'downAmount' => 1
+                            ],
                         'vegan' =>
-                        [
-                            'category' => 'vegan',
-                            'upAmount' => 1,
-                            'downAmount' => 0
-                        ]
+                            [
+                                'category' => 'vegan',
+                                'upAmount' => 1,
+                                'downAmount' => 0
+                            ]
                     ]
                 ]
             ]
@@ -102,12 +118,11 @@ class AppTest extends \PHPUnit\Framework\TestCase
         $initial = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => ['599d8f522626b']]);
         $response = $this->app->rateAPlace('599d8f522626b', 'lgbt', 1);
 
-        $oldRating = $initial[0]['ratings'][0]['upAmount'];
+        $oldRating = $initial[0]['ratings']['lgbt']['upAmount'];
         $expected = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => ['599d8f522626b']]);
-        $newRating = $expected[0]['ratings'][0]['upAmount'];
-
-        $this->assertEquals($oldRating+1, $newRating);
-
+        $newRating = $expected[0]['ratings']['lgbt']['upAmount'];
         $this->app->deleteRating($response['id']);
+
+        $this->assertEquals($oldRating + 1, $newRating);
     }
 }
