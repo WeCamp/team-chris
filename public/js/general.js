@@ -1,4 +1,7 @@
 var googleMap;
+var API = {
+	url:  '/api'
+};
 
 function Map(element) {
 	
@@ -7,7 +10,7 @@ function Map(element) {
 	var defaultLocation = {
 		lat: -34.397,
 		lng: 150.644
-	}
+	};
 
 	this.initializeMap = function() {
 		if (!navigator.geolocation) {
@@ -69,7 +72,10 @@ function Map(element) {
 		    icon: image,
 		    position: place.geometry.location
 	    });
+	    $(marker).data('place', place);
 	    addInfoWindow(place, marker);
+
+	    marker.addListener('click', showBusinessDetails);
     }
 
     var addInfoWindow = function(place, marker) {
@@ -84,7 +90,24 @@ function Map(element) {
 	    });
     };
 
-    var showInfoBox
+    var showBusinessDetails = function(e) {
+    	var marker = this;
+    	var place = $(marker).data('place');
+
+    	var infoBox = $('#info-box');
+
+    	$(infoBox).data('place', place);
+
+    	$('.name', infoBox).text(place.name);
+    	if (!place.phone) {
+    		$('.phone', infoBox).hide();
+    	} else {
+			$('.phone', infoBox).text(place.phone).show();
+    	}
+    	$('.address', infoBox).html(place.formatted_address.split(/\s*\,\s*/).join('<br>'));
+
+    	$(infoBox).addClass('show');
+    }
 
 	var setLocationCallback = function(position) {
 		displayMap(position.coords.latitude, position.coords.longitude);
@@ -118,6 +141,33 @@ function Search(map) {
 
 }
 
+function Voter (element) {
+	$('.up, .down', element).on('click', function() {
+		var infoBox = $(this).closest('#info-box');
+		var place = $(infoBox).data('place');
+
+		console.log(place);
+
+		var vote = 1;
+		
+		if ($(this).hasClass('down')) {
+			vote = -1;
+		}
+
+		$.post({
+			url: API.url + '/reviews',
+			data: [
+				{
+					"placeId": place.id,
+					"category": "lgbt",
+					"vote": vote
+				}
+			]
+		})
+	});
+}
+
 var map = new Map(document.getElementById('map'));
 var search = new Search(map);
 search.submitForm();
+var voter = new Voter(document.getElementById('rate'));
