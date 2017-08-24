@@ -1,6 +1,10 @@
 body, html {
 	margin: 0;
 	padding: 0;
+	font-family: Verdana;
+	font-size: 15px;
+	line-height: 21px;
+	color: #3c3c3c;
 }
 
 #site-wrapper {
@@ -16,7 +20,7 @@ body, html {
 	height: 100%;
 	top: 0px;
 	left: 0px;
-	background-color: green;
+	background-color: #3c3c3c;
 }
 
 #map {
@@ -31,12 +35,180 @@ body, html {
 	position: fixed;
 	box-sizing: border-box;
 	width: 280px;
-	padding: 20px 15px;
+	padding: 20px;
 	background-color: white;
 	left: 50%;
 	margin-left: -140px;
 	top: 0px;
+	border-radius: 0px 0px 3px 3px;
+	border: 1px solid #e1e1e1;
 }
+
+#search-form label {
+	display: block;
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
+	margin-bottom: 15px;
+	color: #501537;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+#search-form label span {
+	color: #922D50;
+}
+
+#search {
+	display: block;
+	position: relative;
+	box-sizing: border-box;
+	padding: 0px 35px 10px 0px;
+	width: 100%;
+	margin: 0px;
+	border-style: solid;
+	border-color: #e1e1e1;
+	border-width: 0px 0px 1px 0px;
+	outline: none;
+	font-family: Verdana;
+	font-size: 13px;
+	line-height: 19px;
+	color: #8c8c8c;
+	font-style: italic;
+}
+
+#search-form .form-item {
+	display: block;
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+#search-form .form-item:after {
+	content:"";
+	display: block;
+	position: absolute;
+	box-sizing: border-box;
+	height: 20px;
+	width: 20px;
+	background: url('../img/search.png') no-repeat;
+	background-size: 20px;
+	bottom: 10px;
+	right: 0px;
+}
+
+#search:hover,
+#search:focus {
+	border-color: #8c8c8c;
+}
+
+#info-box {
+	display: none;
+	position: fixed;
+	box-sizing: border-box;
+	width: 300px;
+	height: 100%;
+	background-color: #922D50;
+	padding: 20px;
+	font-family: Verdana;
+	font-size: 13px;
+	line-height: 19px;
+	color: #E8A2BA;
+	text-shadow: 0px 1px 1px #501537;
+	border-right: 1px solid #241028;
+}
+#info-box.show {
+	display: block;
+}
+
+#info-box h2 {
+	display: block;
+	position: relative;
+	float: left;
+	width: 100%;
+	color: #501537;
+	text-shadow: 0px 1px 1px #A54768;
+	float: left;
+	margin: 8px 0px 12px 0px;
+}
+
+#info-box p {
+	display: block;
+	position: relative;
+	width: 100%;
+	float: left;
+	font-style: italic;
+	float: left;
+	margin: 4px 0px;
+}
+
+.rate {
+	display: block;
+	position: relative;
+	width: 100%;
+	float: left;
+	box-sizing: border-box;
+	width: 100%;
+	border-radius: 3px;
+	background-color: #501537;
+	padding: 10px 50px 10px 10px;
+	margin-top: 12px;
+	height: 40px;
+}
+
+.rate .up,
+.rate .down {
+	display: inline-block;
+	position: relative;
+	float: left;
+	height: 20px;
+	padding: 0px 8px;
+	margin-right: 8px;
+	background-color: #A54768;
+	border-radius: 3px;
+	cursor: pointer;
+	color: #ffffff;
+}
+
+.rate .rate-label {
+	display: inline-block;
+	position: relative;
+	float: left;
+	height: 20px;
+	margin-right: 8px;
+}
+
+.rate .up:hover,
+.rate .down:hover {
+	border: 1px solid #E8A2BA;
+	margin: -1px 7px -1px -1px;
+}
+
+.rating {
+	display: block;
+	position: absolute;
+	right: 10px;
+	top: -10px;
+	width: 60px;
+	height: 60px;
+	line-height: 60px;
+	background-color: #ffffff;
+	float: left;
+	box-sizing: border-box;
+	border-radius: 30px;
+	color: #7CB518;
+	font-size: 15px;
+	text-shadow: 0px 1px 1px #5C8001;
+	text-align: center;
+	-webkit-transform: rotate(10deg);
+    -moz-transform: rotate(10deg);
+    -o-transform: rotate(10deg);
+    -ms-transform: rotate(10deg);
+    transform: rotate(10deg);
+}
+
+/* Google styling */
 
 .gm-style .gm-style-iw + div {
 	display: none;
@@ -45,3 +217,45 @@ body, html {
 .gm-style .gm-style-iw > div {
 	padding-left: 20px;
 }
+
+@media screen and (max-width: 40.000em) {
+
+	#info-box {
+		position: relative;
+		float: left;
+		margin-top: 100%;
+		height: auto;
+		width: 100%;
+		padding-bottom: 30px;
+	}
+
+	#search-form .form-item:after {
+		bottom: 0px;
+	}
+
+	#search-form {
+		padding: 12px 20px;
+		width: 100%;
+		left: 0px;
+		margin-left: 0px;
+	}
+
+	#search {
+		border: 0;
+		padding-bottom: 0px;
+		padding: 0px 0px 0px 15px;
+		border-left: 1px solid #c1c1c1 !important;
+	}
+
+	#search-form label {
+		margin-bottom: 10px;
+		font-size: 15px;
+		font-weight: bold;
+		line-height: 15px;
+	}
+
+}
+
+
+
+
