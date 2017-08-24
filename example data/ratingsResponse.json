@@ -3,9 +3,18 @@
     "id": 1337,
     "ratings": [
       {
-        "category": "LGBT",
-        "upAmount": 1,
-        "downAmount": 1
+        "lgbt": {
+          "category": "lgbt",
+          "upAmount": 1,
+          "downAmount": 1
+        }
+      },
+      {
+        "vegan": {
+          "category": "vegan",
+          "upAmount": 1,
+          "downAmount": 1
+        }
       }
     ]
   },
@@ -13,9 +22,11 @@
     "id": 1338,
     "ratings": [
       {
-        "category": "LGBT",
-        "upAmount": 1,
-        "downAmount": 1
+        "lgbt" : {
+          "category": "lgbt",
+          "upAmount": 1,
+          "downAmount": 1
+        }
       }
     ]
   }
