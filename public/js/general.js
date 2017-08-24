@@ -130,7 +130,24 @@ function Map (element) {
     }
     $('.address', infoBox).html(place.formatted_address.split(/\s*\,\s*/).join('<br>'));
 
+
+    let $votes = $('.votes', infoBox);
+
+    let upAmount = place.ratings.lgbt.upAmount
+    let downAmount = place.ratings.lgbt.downAmount
+
+    $('.up-votes', $votes).text(upAmount);
+    $('.down-votes', $votes).text(downAmount);
+    let totalVotes = Number(upAmount) + Number(downAmount);
+    let rating = Math.round((upAmount / totalVotes) * 100);
+    let ratingString = String(rating) + '%';
+    if (isNaN(rating)) {
+      ratingString = '-';
+    }
+    $('.rating', infoBox).text(ratingString);
+
     $(infoBox).addClass('show');
+
     mobileAnimation(infoBox);
   };
 
