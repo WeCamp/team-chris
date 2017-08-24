@@ -26,7 +26,7 @@ class AppTest extends \PHPUnit\Framework\TestCase
 
     public function testRateANewPlace()
     {
-        $response = $this->app->rateAPlace($this->placeId, 1);
+        $response = $this->app->rateAPlace($this->placeId, 'lgbt', 1);
         $rating = $this->rating;
         $rating['upAmount']++;
         $this->assertEquals(['placeId' => $this->placeId, 'ratings' => [$rating]], $response);
@@ -93,10 +93,10 @@ class AppTest extends \PHPUnit\Framework\TestCase
 
     public function testRateAnExistingPlace()
     {
-        $response = $this->app->rateAPlace($this->placeId, 1);
+        $response = $this->app->rateAPlace('599d8f522626b', 'lgbt', 1);
         $rating = $this->rating;
         $rating['upAmount']++;
-        $this->assertEquals(['placeId' => $this->placeId, 'ratings' => [$rating]], $response);
+        $this->assertEquals(['placeId' => '599d8f522626b', 'ratings' => [$rating]], $response);
     }
 
 

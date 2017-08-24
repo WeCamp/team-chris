@@ -14,9 +14,33 @@ class App
         $this->db = $db;
     }
 
-    public function rateAPlace(string $id, int $vote)
+    public function rateAPlace(string $placeId, string $category, int $rating)
     {
-        //add a new entry to the db
+        $insert = "
+        INSERT INTO ratings (place_id, rating, category) VALUES 
+        (:place_id, :rating, :category)
+        ";
+
+        $stm = $this->db->prepare($insert);
+
+        $stm->bindParam(':place_id', $placeId, \PDO::PARAM_STR);
+        $stm->bindParam(':category', $category, \PDO::PARAM_STR);
+        $stm->bindParam(':rating', $rating, \PDO::PARAM_INT);
+
+        $stm->execute();
+
+        return $this->getRating($this->db->lastInsertId());
+    }
+
+    private function getRating(int $id)
+    {
+        $select = "
+        SELECT * FROM ratings WHERE id = :id
+        ";
+        $stm = $this->db->prepare($select);
+
+        $stm->execute();
+        return $stm->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function checkPlaces(array $request): array
@@ -25,11 +49,9 @@ class App
         $placeIds = $request['placeIds'];
         $result = [];
 
-
         foreach ($placeIds as $placeId) {
             array_push($result, ['placeId' => $placeId, 'ratings' => $this->countRatings($placeId, $categories)]);
         }
-
 
         return $result;
     }
