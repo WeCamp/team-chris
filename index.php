@@ -1,6 +1,30 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Response;
+
+// Serve up static CSS/JS files
+if (preg_match('/\/(css|js)\//', $_SERVER['PHP_SELF'], $matches)) {
+    if (!file_exists(__DIR__ . '/public' . $_SERVER['PHP_SELF'])) {
+        echo $matches[1] . ' file not found - ' . $_SERVER['PHP_SELF'];
+    }
+
+    $content = file_get_contents(__DIR__ . '/public' . $_SERVER['PHP_SELF']);
+    header('Content-type: text/' . $matches[1], true);
+    echo $content;
+    die;
+}
+
+// Serve up static image files
+if (preg_match('/\/(img)\/.*\.(.*)$/', $_SERVER['PHP_SELF'], $matches)) {
+    if (!file_exists(__DIR__ . '/public' . $_SERVER['PHP_SELF'])) {
+        echo $matches[1] . ' file not found - ' . $_SERVER['PHP_SELF'];
+    }
+
+    $content = file_get_contents(__DIR__ . '/public' . $_SERVER['PHP_SELF']);
+    header('Content-type: image/' . $matches[2], true);
+    echo $content;
+    die;
+}
 
 require 'vendor/autoload.php';
 
