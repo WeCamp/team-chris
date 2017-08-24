@@ -1,5 +1,6 @@
 <?php
-use \Psr\Http\Message\ServerRequestInterface as Request;
+
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Http\Response;
 
 // Serve up static CSS/JS files
@@ -40,6 +41,7 @@ $container = $app->getContainer();
 $container['view'] = function ($container) {
     return new \Slim\Views\PhpRenderer('public');
 };
+
 
 $app->get('/', function ($request, $response, $args) {
     return $this->view->render($response, 'index.html');
