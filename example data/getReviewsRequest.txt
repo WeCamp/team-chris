@@ -1,1 +1,1 @@
-GET /reviews?ids=ilhwihfilfiuhfilwflae;jhcblijcljasdahcklglkcleab&categories=LGBT;vegan
+http://christeam.dev/api/reviews?place_ids[]=599d8f522626b&place_ids[]=599d8f522626c&categories[]=lgbt&categories[]=vegan
