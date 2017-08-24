@@ -58,7 +58,7 @@ class AppTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $response,
             [
-                [
+                $id1 => [
                     'placeId' => $id1,
                     'ratings' => [
                         'lgbt' =>
@@ -69,7 +69,7 @@ class AppTest extends \PHPUnit\Framework\TestCase
                             ]
                     ]
                 ],
-                [
+                $id2 => [
                     'placeId' => $id2,
                     'ratings' => [
                         'lgbt' =>
@@ -92,7 +92,7 @@ class AppTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $response,
             [
-                [
+                '599d8f522626b' => [
                     'placeId' => '599d8f522626b',
                     'ratings' => [
                         'lgbt' =>
@@ -118,9 +118,9 @@ class AppTest extends \PHPUnit\Framework\TestCase
         $initial = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => ['599d8f522626b']]);
         $response = $this->app->rateAPlace('599d8f522626b', 'lgbt', 1);
 
-        $oldRating = $initial[0]['ratings']['lgbt']['upAmount'];
+        $oldRating = $initial['599d8f522626b']['ratings']['lgbt']['upAmount'];
         $expected = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => ['599d8f522626b']]);
-        $newRating = $expected[0]['ratings']['lgbt']['upAmount'];
+        $newRating = $expected['599d8f522626b']['ratings']['lgbt']['upAmount'];
         $this->app->deleteRating($response['id']);
 
         $this->assertEquals($oldRating + 1, $newRating);
