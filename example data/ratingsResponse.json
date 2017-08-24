@@ -2,8 +2,18 @@
   {
     "id": 1337,
     "ratings": [
+
+      'LGBT': {
+        "upAmount": 1,
+        "downAmount": 1
+      }
       {
         "category": "LGBT",
+        "upAmount": 1,
+        "downAmount": 1
+      },
+      {
+        "category": "Vegan",
         "upAmount": 1,
         "downAmount": 1
       }

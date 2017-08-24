@@ -7,7 +7,6 @@ use TeamChris\App;
 
 class AppTest extends \PHPUnit\Framework\TestCase
 {
-    private $placeIds;
     private $placeId;
     private $rating = ['category' => 'LGBT', 'upAmount' => 0, 'downAmount' => 0];
 
@@ -23,13 +22,18 @@ class AppTest extends \PHPUnit\Framework\TestCase
         $this->app = new App($db);
     }
 
-
     public function testRateANewPlace()
     {
         $response = $this->app->rateAPlace($this->placeId, 'lgbt', 1);
         $rating = $this->rating;
         $rating['upAmount']++;
-        $this->assertEquals(['placeId' => $this->placeId, 'ratings' => [$rating]], $response);
+        $this->assertNotEquals($response, false);
+
+        $this->assertNotFalse($this->app->getRating($response['id']));
+
+        $this->app->deleteRating($response['id']);
+
+        $this->assertFalse($this->app->getRating($response['id']));
     }
 
 
@@ -67,7 +71,7 @@ class AppTest extends \PHPUnit\Framework\TestCase
 
     public function testOneExistentPlace()
     {
-        $response = $this->app->checkPlaces(['categories' => ['lgbt','vegan'], 'placeIds' => ['599d8f522626b']]);
+        $response = $this->app->checkPlaces(['categories' => ['lgbt', 'vegan'], 'placeIds' => ['599d8f522626b']]);
 
         $this->assertEquals(
             $response,
@@ -93,11 +97,15 @@ class AppTest extends \PHPUnit\Framework\TestCase
 
     public function testRateAnExistingPlace()
     {
+        $initial = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => ['599d8f522626b']]);
         $response = $this->app->rateAPlace('599d8f522626b', 'lgbt', 1);
-        $rating = $this->rating;
-        $rating['upAmount']++;
-        $this->assertEquals(['placeId' => '599d8f522626b', 'ratings' => [$rating]], $response);
+
+        $oldRating = $initial[0]['ratings'][0]['upAmount'];
+        $expected = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => ['599d8f522626b']]);
+        $newRating = $expected[0]['ratings'][0]['upAmount'];
+
+        $this->assertEquals($oldRating+1, $newRating);
+
+        $this->app->deleteRating($response['id']);
     }
-
-
 }

@@ -16,29 +16,50 @@ class App
 
     public function rateAPlace(string $placeId, string $category, int $rating)
     {
-        $insert = "
+        try {
+            $insert = "
         INSERT INTO ratings (place_id, rating, category) VALUES 
         (:place_id, :rating, :category)
         ";
 
-        $stm = $this->db->prepare($insert);
+            $stm = $this->db->prepare($insert);
 
-        $stm->bindParam(':place_id', $placeId, \PDO::PARAM_STR);
-        $stm->bindParam(':category', $category, \PDO::PARAM_STR);
-        $stm->bindParam(':rating', $rating, \PDO::PARAM_INT);
+            //$stm->bindParam(':place_id', $placeId, \PDO::PARAM_STR);
+            //$stm->bindParam(':category', $category, \PDO::PARAM_STR);
+            //$stm->bindParam(':rating', $rating, \PDO::PARAM_INT);
 
-        $stm->execute();
+            $data['place_id'] = $placeId;
+            $data['category'] = $category;
+            $data['rating'] = $rating;
 
-        return $this->getRating($this->db->lastInsertId());
+            $stm->execute($data);
+
+            return $this->getRating($this->db->lastInsertId());
+        } catch (\PDOException $e) {
+            $error = new Error('400', $e->getMessage());
+            return $error;
+        }
+
     }
 
-    private function getRating(int $id)
+    public function getRating(int $id)
     {
         $select = "
         SELECT * FROM ratings WHERE id = :id
         ";
         $stm = $this->db->prepare($select);
+        $stm->bindParam(':id', $id);
+        $stm->execute();
+        return $stm->fetch(\PDO::FETCH_ASSOC);
+    }
 
+    public function deleteRating(int $id)
+    {
+        $delete = "
+        DELETE FROM ratings WHERE id = :id
+        ";
+        $stm = $this->db->prepare($delete);
+        $stm->bindParam(':id', $id);
         $stm->execute();
         return $stm->fetch(\PDO::FETCH_ASSOC);
     }
@@ -59,6 +80,8 @@ class App
 
     private function countRatings(string $placeId, $categories): array
     {
+
+        // TODO: try catch
         $params = [':place_id' => $placeId];
         $in_params = [];
 
