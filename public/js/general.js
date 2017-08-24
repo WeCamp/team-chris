@@ -203,8 +203,6 @@ function Voter (element) {
     let infoBox = $(this).closest('#info-box');
     let place = $(infoBox).data('place');
 
-    console.log(place);
-
     let vote = 1;
 
     if ($(this).hasClass('down')) {
@@ -223,7 +221,6 @@ function Voter (element) {
       ]
     };
 
-    console.log(data);
     $.post(url, data, null, 'json')
       .done(function (response) {
         console.log('Result!', response);
