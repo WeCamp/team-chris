@@ -44,24 +44,35 @@ class App
 
     public function getRating(int $id)
     {
-        $select = "
+
+        try {
+            $select = "
         SELECT * FROM ratings WHERE id = :id
         ";
-        $stm = $this->db->prepare($select);
-        $stm->bindParam(':id', $id);
-        $stm->execute();
-        return $stm->fetch(\PDO::FETCH_ASSOC);
+            $stm = $this->db->prepare($select);
+            $stm->bindParam(':id', $id);
+            $stm->execute();
+            return $stm->fetch(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            $error = new Error('400', $e->getMessage());
+            return $error;
+        }
     }
 
     public function deleteRating(int $id)
     {
-        $delete = "
+        try {
+            $delete = "
         DELETE FROM ratings WHERE id = :id
         ";
-        $stm = $this->db->prepare($delete);
-        $stm->bindParam(':id', $id);
-        $stm->execute();
-        return $stm->fetch(\PDO::FETCH_ASSOC);
+            $stm = $this->db->prepare($delete);
+            $stm->bindParam(':id', $id);
+            $stm->execute();
+            return $stm->fetch(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            $error = new Error('400', $e->getMessage());
+            return $error;
+        }
     }
 
     public function checkPlaces(array $request): array
@@ -80,20 +91,19 @@ class App
 
     private function countRatings(string $placeId, $categories): array
     {
+        try {
+            $params = [':place_id' => $placeId];
+            $in_params = [];
 
-        // TODO: try catch
-        $params = [':place_id' => $placeId];
-        $in_params = [];
+            $in = "";
+            foreach ($categories as $i => $item) {
+                $key = ":category" . $i;
+                $in .= "$key,";
+                $in_params[$key] = $item; // collecting values into key-value array
+            }
+            $in = rtrim($in, ","); // :id0,:id1,:id2
 
-        $in = "";
-        foreach ($categories as $i => $item) {
-            $key = ":category" . $i;
-            $in .= "$key,";
-            $in_params[$key] = $item; // collecting values into key-value array
-        }
-        $in = rtrim($in, ","); // :id0,:id1,:id2
-
-        $sql = "
+            $sql = "
         SELECT
         category, 
         SUM(CASE WHEN  rating > 0 THEN rating ELSE 0 END) as upAmount,
@@ -101,32 +111,30 @@ class App
         FROM ratings  WHERE place_id = :place_id AND category IN ($in) GROUP BY category
         ";
 
-        $stm = $this->db->prepare($sql);
+            $stm = $this->db->prepare($sql);
 
-        $allParams = array_merge($params, $in_params);
+            $allParams = array_merge($params, $in_params);
 
-        $stm->execute($allParams);
+            $stm->execute($allParams);
 
-        $results = $stm->fetchAll(\PDO::FETCH_ASSOC);
-        if ($results == false) {
-            foreach ($categories as $category) {
-                $results[$category] = ['category' => $category, 'upAmount' => 0, 'downAmount' => 0];
+            $results = $stm->fetchAll(\PDO::FETCH_ASSOC);
+            if ($results == false) {
+                foreach ($categories as $category) {
+                    $results[$category] = ['category' => $category, 'upAmount' => 0, 'downAmount' => 0];
+                }
+            } else {
+                $outcome = [];
+                foreach ($results as $result) {
+                    $outcome[$result['category']] = $result;
+                }
+
+                $results = $outcome;
             }
+
+            return $results;
+        } catch (\PDOException $e) {
+            $error = new Error('400', $e->getMessage());
+            return $error;
         }
-        else {
-            $outcome = [];
-            foreach ($results as $result) {
-                $outcome[$result['category']] = $result;
-            }
-
-            $results = $outcome;
-        }
-
-        return $results;
-    }
-
-    private function getEntryFromDatabase($id)
-    {
-
     }
 }

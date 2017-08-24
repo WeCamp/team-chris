@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d30d3e88d531ecb43a7c66fac0661d1",
+    "content-hash": "e2feb5e39c653046259cc8f9982233f1",
     "packages": [
         {
             "name": "nikic/fast-route",
@@ -288,6 +288,61 @@
                 "psr7"
             ],
             "time": "2017-06-29T12:20:47+00:00"
+        },
+        {
+            "name": "slim/php-view",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slimphp/PHP-View.git",
+                "reference": "b721888d0a53052c06faf2a6fae9e9956c269175"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slimphp/PHP-View/zipball/b721888d0a53052c06faf2a6fae9e9956c269175",
+                "reference": "b721888d0a53052c06faf2a6fae9e9956c269175",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://toran.weca.mp/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "slim/slim": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Slim\\Views\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Glenn Eggleton",
+                    "email": "geggleto@gmail.com"
+                }
+            ],
+            "description": "Render PHP view scripts into a PSR-7 Response object.",
+            "keywords": [
+                "framework",
+                "php",
+                "phtml",
+                "renderer",
+                "slim",
+                "template",
+                "view"
+            ],
+            "time": "2017-07-05T20:09:48+00:00"
         },
         {
             "name": "slim/slim",
@@ -1991,6 +2046,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "slim/slim": 20,
+        "slim/php-view": 20,
         "phpunit/phpunit": 20
     },
     "prefer-stable": false,

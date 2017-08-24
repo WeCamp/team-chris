@@ -1,4 +1,9 @@
 RewriteEngine on
+
+RewriteCond %{DOCUMENT_ROOT}/public/$0 -f
+RewriteRule ^.+$ public/$0 [L]
+
+
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [QSA,NC,L]

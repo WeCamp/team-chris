@@ -28,6 +28,7 @@
     }
   },
   "require": {
-    "slim/slim": "4.x-dev"
+    "slim/slim": "4.x-dev",
+    "slim/php-view": "dev-master"
   }
 }
