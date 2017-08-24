@@ -103,19 +103,26 @@ class App
 
         $stm = $this->db->prepare($sql);
 
-
         $allParams = array_merge($params, $in_params);
 
         $stm->execute($allParams);
 
-        $result = $stm->fetchAll(\PDO::FETCH_ASSOC);
-
-        if ($result == false) {
+        $results = $stm->fetchAll(\PDO::FETCH_ASSOC);
+        if ($results == false) {
             foreach ($categories as $category) {
-                array_push($result, ['category' => $category, 'upAmount' => 0, 'downAmount' => 0]);
+                $results[$category] = ['category' => $category, 'upAmount' => 0, 'downAmount' => 0];
             }
         }
-        return $result;
+        else {
+            $outcome = [];
+            foreach ($results as $result) {
+                $outcome[$result['category']] = $result;
+            }
+
+            $results = $outcome;
+        }
+
+        return $results;
     }
 
     private function getEntryFromDatabase($id)

@@ -79,11 +79,13 @@ class AppTest extends \PHPUnit\Framework\TestCase
                 [
                     'placeId' => '599d8f522626b',
                     'ratings' => [
+                        'lgbt' =>
                         [
                             'category' => 'lgbt',
                             'upAmount' => 1,
                             'downAmount' => 1
                         ],
+                        'vegan' =>
                         [
                             'category' => 'vegan',
                             'upAmount' => 1,
