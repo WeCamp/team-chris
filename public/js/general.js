@@ -107,7 +107,23 @@ function Map(element) {
     	$('.address', infoBox).html(place.formatted_address.split(/\s*\,\s*/).join('<br>'));
 
     	$(infoBox).addClass('show');
+    	mobileAnimation(infoBox);
+    };
+
+    var mobileAnimation = function(infoBox) {
+		if ($(window).width() <= 640) {
+			infoBox.css('margin-top', ($(window).height() + 'px'));
+    		scrollToElement(infoBox);
+    	} else {
+    		infoBox.css('margin-top', 'auto');
+    	}
     }
+
+    var scrollToElement = function(element) {
+    	$('html, body').animate({
+        	scrollTop: element.offset().top
+    	}, 1000);
+    };
 
 	var setLocationCallback = function(position) {
 		displayMap(position.coords.latitude, position.coords.longitude);
