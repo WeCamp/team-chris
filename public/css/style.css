@@ -228,6 +228,16 @@ body, html {
 	padding-left: 20px;
 }
 
+@media screen and (max-width: 64.000em) {
+
+	#search-form {
+		left: auto;
+		margin-left: 0px;
+		right: 20px;
+	}
+
+}
+
 @media screen and (max-width: 40.000em) {
 
 	#info-box {
@@ -258,8 +268,7 @@ body, html {
 	#search-form {
 		padding: 12px 20px;
 		width: 100%;
-		left: 0px;
-		margin-left: 0px;
+		right: 0px;
 	}
 
 	#search {
@@ -277,7 +286,3 @@ body, html {
 	}
 
 }
-
-
-
-
