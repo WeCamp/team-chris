@@ -149,7 +149,6 @@ body, html {
 	width: 100%;
 	float: left;
 	font-style: italic;
-	float: left;
 	margin: 4px 0px;
 }
 
@@ -216,6 +215,22 @@ body, html {
     -o-transform: rotate(10deg);
     -ms-transform: rotate(10deg);
     transform: rotate(10deg);
+}
+
+.votes {
+	display: block;
+	position: relative;
+	float: left;
+	width: 100%;
+	box-sizing: border-box;
+	color: #501537;
+	text-shadow: 0px 1px 1px #A54768;
+	margin-top: 10px;
+}
+
+.votes .highlight {
+	color: #E8A2BA;
+	text-shadow: 0px 1px 1px #501537;
 }
 
 /* Google styling */
