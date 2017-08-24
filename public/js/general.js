@@ -71,12 +71,17 @@ function Map (element) {
 
     $.getJSON(url)
       .then(function (response) {
-        for (let placeId in places) {
-          if ('undefined' !== typeof(response[placeId.id])) {
-            places[placeId].ratings = response[placeId].ratings
+        console.log(response);
+        $.each(places, function (i, place) {
+          let placeId = place.id;
+          console.log('placeId:', placeId);
+          if ('undefined' !== typeof(response[placeId])) {
+            place.ratings = response[placeId].ratings;
+          } else {
+            console.log('No ratings for ' + placeId);
           }
-          createMarker(places[placeId]);
-        }
+          createMarker(place);
+        });
       });
   };
 
