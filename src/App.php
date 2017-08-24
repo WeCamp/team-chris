@@ -77,10 +77,10 @@ class App
 
     public function checkPlaces(array $request): array
     {
+
         $categories = $request['categories'];
         $placeIds = $request['placeIds'];
         $result = [];
-
         foreach ($placeIds as $placeId) {
             array_push($result, ['placeId' => $placeId, 'ratings' => $this->countRatings($placeId, $categories)]);
         }
@@ -133,6 +133,8 @@ class App
 
             return $results;
         } catch (\PDOException $e) {
+            var_dump($e);
+            die;
             $error = new Error('400', $e->getMessage());
             return $error;
         }
