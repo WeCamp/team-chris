@@ -51,7 +51,7 @@ body, html {
 	box-sizing: border-box;
 	width: 100%;
 	margin-bottom: 15px;
-	color: #501537;
+	color: #3c3c3c;
 	font-size: 18px;
 	font-weight: bold;
 	line-height: 24px;
@@ -149,7 +149,6 @@ body, html {
 	width: 100%;
 	float: left;
 	font-style: italic;
-	float: left;
 	margin: 4px 0px;
 }
 
@@ -218,6 +217,22 @@ body, html {
     transform: rotate(10deg);
 }
 
+.votes {
+	display: block;
+	position: relative;
+	float: left;
+	width: 100%;
+	box-sizing: border-box;
+	color: #501537;
+	text-shadow: 0px 1px 1px #A54768;
+	margin-top: 10px;
+}
+
+.votes .highlight {
+	color: #E8A2BA;
+	text-shadow: 0px 1px 1px #501537;
+}
+
 /* Google styling */
 
 .gm-style .gm-style-iw + div {
@@ -226,6 +241,16 @@ body, html {
 
 .gm-style .gm-style-iw > div {
 	padding-left: 20px;
+}
+
+@media screen and (max-width: 64.000em) {
+
+	#search-form {
+		left: auto;
+		margin-left: 0px;
+		right: 20px;
+	}
+
 }
 
 @media screen and (max-width: 40.000em) {
@@ -258,8 +283,7 @@ body, html {
 	#search-form {
 		padding: 12px 20px;
 		width: 100%;
-		left: 0px;
-		margin-left: 0px;
+		right: 0px;
 	}
 
 	#search {
@@ -277,7 +301,3 @@ body, html {
 	}
 
 }
-
-
-
-
