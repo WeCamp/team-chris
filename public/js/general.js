@@ -54,12 +54,30 @@ function Map (element) {
   };
 
   let displayBusinesses = function (results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      for (let i = 0; i < results.length; i++) {
-        let place = results[i];
-        createMarker(results[i]);
-      }
+
+    if (status !== google.maps.places.PlacesServiceStatus.OK) {
+      return;
     }
+
+    let placeIds = [];
+    let places = [];
+
+    for (let i = 0; i < results.length; i++) {
+      places.push(results[i]);
+      placeIds.push(results[i].id);
+    }
+
+    let url = API.url + '/reviews?categories[]=lgbt&placeIds[]=' + placeIds.join('&placeIds[]=');
+
+    $.getJSON(url)
+      .then(function (response) {
+        for (let placeId in places) {
+          if ('undefined' !== typeof(response[placeId.id])) {
+            places[placeId].ratings = response[placeId].ratings
+          }
+          createMarker(places[placeId]);
+        }
+      });
   };
 
   let createMarker = function (place) {
