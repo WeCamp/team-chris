@@ -4,7 +4,6 @@ let API = {
   url: '/api'
 };
 
-
 function Map (element) {
 
   let placesApi;
@@ -12,6 +11,8 @@ function Map (element) {
     lat: -34.397,
     lng: 150.644
   };
+
+  let markers = [];
 
   this.initializeMap = function () {
     if (!navigator.geolocation) {
@@ -71,7 +72,9 @@ function Map (element) {
 
     $.getJSON(url)
       .then(function (response) {
-        console.log(response);
+
+		removeMarkers();
+
         $.each(places, function (i, place) {
           let placeId = place.id;
           console.log('placeId:', placeId);
@@ -85,6 +88,15 @@ function Map (element) {
       });
   };
 
+  let removeMarkers = function() {
+  	 console.log(markers);
+  	 for (var i = 0; i < markers.length; i++) {
+       markers[i].setMap(null);
+     }
+  	 markers = [];
+  	 console.log(markers);
+  }
+
   let createMarker = function (place) {
     let image = {
       url:        place.icon,
@@ -96,6 +108,7 @@ function Map (element) {
       icon:     image,
       position: place.geometry.location
     });
+    markers.push(marker);
     $(marker).data('place', place);
     addInfoWindow(place, marker);
 
@@ -148,7 +161,7 @@ function Map (element) {
 
     	$(infoBox).addClass('show');
     	mobileAnimation(infoBox);
-    	
+
 		$('.thank-you', infoBox).hide();
     };
 
