@@ -5,7 +5,6 @@ let API = {
   url: '/api'
 };
 
-
 function Map (element) {
 
   let placesApi;
@@ -13,6 +12,8 @@ function Map (element) {
     lat: -34.397,
     lng: 150.644
   };
+
+  let markers = [];
 
   this.initializeMap = function () {
     if (!navigator.geolocation) {
@@ -73,7 +74,9 @@ function Map (element) {
 
     $.getJSON(url)
       .then(function (response) {
-        console.log(response);
+
+		removeMarkers();
+
         $.each(places, function (i, place) {
           let placeId = place.id;
           console.log('placeId:', placeId);
@@ -87,6 +90,15 @@ function Map (element) {
       });
   };
 
+  let removeMarkers = function() {
+  	 console.log(markers);
+  	 for (var i = 0; i < markers.length; i++) {
+       markers[i].setMap(null);
+     }
+  	 markers = [];
+  	 console.log(markers);
+  }
+
   let createMarker = function (place) {
     let image = {
       url:        place.icon,
@@ -98,6 +110,7 @@ function Map (element) {
       icon:     image,
       position: place.geometry.location
     });
+    markers.push(marker);
     $(marker).data('place', place);
     addInfoWindow(place, marker);
 
@@ -148,10 +161,11 @@ function Map (element) {
     }
     $('.rating', infoBox).text(ratingString);
 
-    $(infoBox).addClass('show');
+    	$(infoBox).addClass('show');
+    	mobileAnimation(infoBox);
 
-    mobileAnimation(infoBox);
-  };
+		$('.thank-you', infoBox).hide();
+    };
 
   let mobileAnimation = function (infoBox) {
     if ($(window).width() <= 640) {
@@ -181,15 +195,16 @@ function Search (map) {
 
   let searchForm = $('#search-form');
 
-  this.submitForm = function () {
-    searchForm.on('submit', function (event) {
-      event.preventDefault();
-      let formContent = getFormContent();
-      map.updateMap(formContent.searchInputValue);
-    });
-  };
+	this.submitForm = function() {
+		searchForm.on('submit', function(event) {
+			event.preventDefault();
+			let formContent = getFormContent();
+			map.updateMap(formContent.searchInputValue);
+			$('#info-box').removeClass('show');
+		});
+	};
 
-  let getFormContent = function () {
+  	let getFormContent = function () {
 
     formContent = {
       searchInputValue: searchForm.find('#search').val(),
@@ -201,37 +216,40 @@ function Search (map) {
 }
 
 function Voter (element) {
-  $('.up, .down', element).on('click', function () {
-    let infoBox = $(this).closest('#info-box');
-    let place = $(infoBox).data('place');
+	
+	this.addCastVoteHandlers = function() {
+		$('.up, .down', element).on('click', function () {
+		    let infoBox = $(this).closest('#info-box');
+		    let place = $(infoBox).data('place');
 
-    let vote = 1;
+		    let vote = 1;
 
-    if ($(this).hasClass('down')) {
-      vote = -1;
-    }
+		    if ($(this).hasClass('down')) {
+		      vote = -1;
+		    }
 
 
-    let url = API.url + '/reviews';
-    let data = {
-      data: [
-        {
-          "placeId":  place.id,
-          "category": "lgbt",
-          "vote":     vote
-        }
-      ]
-    };
+		    let url = API.url + '/reviews';
+		    let data = {
+		      data: [
+		        {
+		          "placeId":  place.id,
+		          "category": "lgbt",
+		          "vote":     vote
+		        }
+		      ]
+		    };
 
-    $.post(url, data, null, 'json')
-      .done(function (response) {
-        console.log('Result!', response);
-      });
-  });
+		    $.post(url, data, null, 'json')
+		      .done(function (response) {
+				$('.thank-you', infoBox).show();
+		      });
+		});
+	}
 }
 
 window.map = new Map(document.getElementById('map'));
 let search = new Search(map);
 search.submitForm();
-
-new Voter(document.getElementById('rate'));
+let voter = new Voter(document.getElementById('rate'));
+voter.addCastVoteHandlers();
