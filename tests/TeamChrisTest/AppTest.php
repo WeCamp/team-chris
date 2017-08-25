@@ -39,15 +39,10 @@ class AppTest extends \PHPUnit\Framework\TestCase
     public function testRateANewPlace()
     {
         $response = $this->app->rateAPlace($this->placeId, 'lgbt', 1);
-        $rating = $this->rating;
-        $rating['upAmount']++;
+
         $this->assertNotEquals($response, false);
 
-        $this->assertNotFalse($this->app->getRating($response['id']));
-
-        $this->app->deleteRating($response['id']);
-
-        $this->assertFalse($this->app->getRating($response['id']));
+        $this->assertEquals(1, $response[$this->placeId]['ratings']['lgbt']['upAmount']);
     }
 
     public function testNonExistentPlaces()
@@ -116,13 +111,12 @@ class AppTest extends \PHPUnit\Framework\TestCase
     public function testRateAnExistingPlace()
     {
         $initial = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => ['599d8f522626b']]);
-        $response = $this->app->rateAPlace('599d8f522626b', 'lgbt', 1);
+
+        $this->app->rateAPlace('599d8f522626b', 'lgbt', 1);
 
         $oldRating = $initial['599d8f522626b']['ratings']['lgbt']['upAmount'];
         $expected = $this->app->checkPlaces(['categories' => ['lgbt'], 'placeIds' => ['599d8f522626b']]);
         $newRating = $expected['599d8f522626b']['ratings']['lgbt']['upAmount'];
-        $this->app->deleteRating($response['id']);
-
         $this->assertEquals($oldRating + 1, $newRating);
     }
 }
