@@ -4,25 +4,52 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Http\Response;
 
 // Serve up static CSS/JS files
-if (preg_match('/\/(css|js)\//', $_SERVER['PHP_SELF'], $matches)) {
+if (preg_match('/\.(css|js)$/', $_SERVER['PHP_SELF'], $matches)) {
+    $fileExtension = $matches[1];
+
     if (!file_exists(__DIR__ . '/public' . $_SERVER['PHP_SELF'])) {
-        echo $matches[1] . ' file not found - ' . $_SERVER['PHP_SELF'];
+        echo $fileExtension . ' file not found - ' . $_SERVER['PHP_SELF'];
+    }
+
+    switch ($fileExtension) {
+        case 'js';
+            $contentType = 'application/javascript';
+            break;
+
+        case 'css';
+            $contentType = 'text/css';
+            break;
+
+        default:
+            throw new \LogicException('Unknown CSS/JS file extension - ' . $fileExtension);
     }
 
     $content = file_get_contents(__DIR__ . '/public' . $_SERVER['PHP_SELF']);
-    header('Content-type: text/' . $matches[1], true);
+    header('Content-type: ' . $contentType, true);
     echo $content;
     die;
 }
 
 // Serve up static image files
 if (preg_match('/\/(img)\/.*\.(.*)$/', $_SERVER['PHP_SELF'], $matches)) {
+    $fileExtension = $matches[2];
+
     if (!file_exists(__DIR__ . '/public' . $_SERVER['PHP_SELF'])) {
-        echo $matches[1] . ' file not found - ' . $_SERVER['PHP_SELF'];
+        echo $fileExtension . ' file not found - ' . $_SERVER['PHP_SELF'];
+    }
+
+    switch ($fileExtension) {
+        case 'jpg';
+        case 'jpeg';
+            $contentType = 'image/jpeg';
+            break;
+
+        default:
+            throw new \LogicException('Unknown image file extension - ' . $fileExtension);
     }
 
     $content = file_get_contents(__DIR__ . '/public' . $_SERVER['PHP_SELF']);
-    header('Content-type: image/' . $matches[2], true);
+    header('Content-type: ' . $contentType, true);
     echo $content;
     die;
 }
