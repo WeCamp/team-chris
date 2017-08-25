@@ -1,0 +1,24 @@
+{
+  "name": "team-chris",
+  "version": "1.0.0",
+  "description": "A nice LGBT friendly restaurants list that you can vote them based on their friendliness",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.weca.mp:wecamp/team-chris.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "lodash.debounce": "^4.0.8"
+  },
+  "devDependencies": {
+    "webpack": "^3.5.5"
+  }
+}
