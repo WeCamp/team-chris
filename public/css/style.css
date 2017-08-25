@@ -217,6 +217,40 @@ body, html {
     transform: rotate(10deg);
 }
 
+@keyframes ratingAnimation {
+    50%  {
+    	right: 0px;
+		top: -20px;
+    	border-radius: 40px;
+    	width: 80px;
+    	height: 80px;
+		line-height: 80px;
+		-webkit-transform: rotate(20deg);
+	    -moz-transform: rotate(20deg);
+	    -o-transform: rotate(20deg);
+	    -ms-transform: rotate(20deg);
+	    transform: rotate(20deg);
+    }
+    100% {
+    	right: 10px;
+		top: -10px;
+    	border-radius: 30px;
+    	width: 60px;
+		height: 60px;
+		line-height: 60px;
+		-webkit-transform: rotate(10deg);
+	    -moz-transform: rotate(10deg);
+	    -o-transform: rotate(10deg);
+	    -ms-transform: rotate(10deg);
+	    transform: rotate(10deg);
+    }
+}
+
+#info-box.voted .rating {
+    animation-name: ratingAnimation;
+    animation-duration: 1s;
+}
+
 .votes {
 	display: block;
 	position: relative;

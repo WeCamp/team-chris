@@ -7,6 +7,7 @@ let API = {
 
 function Map (element) {
 
+  let scope = this;
   let placesApi;
   let defaultLocation = {
     lat: -34.397,
@@ -75,7 +76,7 @@ function Map (element) {
     $.getJSON(url)
       .then(function (response) {
 
-		removeMarkers();
+        removeMarkers();
 
         $.each(places, function (i, place) {
           let placeId = place.id;
@@ -89,11 +90,11 @@ function Map (element) {
       });
   };
 
-  let removeMarkers = function() {
-  	 for (var i = 0; i < markers.length; i++) {
-       markers[i].setMap(null);
-     }
-  	 markers = [];
+  let removeMarkers = function () {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+    markers = [];
   }
 
   let createMarker = function (place) {
@@ -142,11 +143,21 @@ function Map (element) {
     }
     $('.address', infoBox).html(place.formatted_address.split(/\s*\,\s*/).join('<br>'));
 
+    scope.updateRatings(place, infoBox);
 
-    let $votes = $('.votes', infoBox);
+    infoBox.removeClass('voted');
 
-    let upAmount = place.ratings.lgbt.upAmount
-    let downAmount = place.ratings.lgbt.downAmount
+    $(infoBox).addClass('show');
+    mobileAnimation(infoBox);
+
+    $('.thank-you', infoBox).hide();
+  };
+
+  this.updateRatings = function (ratingObject, scopeElement) {
+    let $votes = $('.votes', scopeElement);
+    console.log(ratingObject.ratings.lgbt.upAmount);
+    let upAmount = ratingObject.ratings.lgbt.upAmount;
+    let downAmount = ratingObject.ratings.lgbt.downAmount;
 
     $('.up-votes', $votes).text(upAmount);
     $('.down-votes', $votes).text(downAmount);
@@ -156,13 +167,8 @@ function Map (element) {
     if (isNaN(rating)) {
       ratingString = '-';
     }
-    $('.rating', infoBox).text(ratingString);
-
-    	$(infoBox).addClass('show');
-    	mobileAnimation(infoBox);
-
-		$('.thank-you', infoBox).hide();
-    };
+    $('.rating', scopeElement).text(ratingString);
+  };
 
   let mobileAnimation = function (infoBox) {
     if ($(window).width() <= 640) {
@@ -171,7 +177,7 @@ function Map (element) {
     } else {
       infoBox.css('margin-top', 'auto');
     }
-  }
+  };
 
   let scrollToElement = function (element) {
     $('html, body').animate({
@@ -192,54 +198,57 @@ function Search (map) {
 
   let searchForm = $('#search-form');
 
-	this.submitForm = function() {
-		searchForm.on('submit', function(event) {
-			event.preventDefault();
-			let formContent = getFormContent();
-			map.updateMap(formContent.searchInputValue);
-			$('#info-box').removeClass('show');
-		});
-	};
+  this.submitForm = function () {
+    searchForm.on('submit', function (event) {
+      event.preventDefault();
+      let formContent = getFormContent();
+      map.updateMap(formContent.searchInputValue);
+      $('#info-box').removeClass('show');
+    });
+  };
 
   let getFormContent = function () {
     return {
       searchInputValue: searchForm.find('#search').val(),
     };
   };
-
 }
 
 function Voter (element) {
-	
-	this.addCastVoteHandlers = function() {
-		$('.up, .down', element).on('click', function () {
-		    let infoBox = $(this).closest('#info-box');
-		    let place = $(infoBox).data('place');
 
-		    let vote = 1;
+  this.addCastVoteHandlers = function () {
+    $('.up, .down', element).on('click', function () {
+      let infoBox = $(this).closest('#info-box');
+      let place = $(infoBox).data('place');
 
-		    if ($(this).hasClass('down')) {
-		      vote = -1;
-		    }
+      let vote = 1;
 
+      if ($(this).hasClass('down')) {
+        vote = -1;
+      }
 
-		    let url = API.url + '/reviews';
-		    let data = {
-		      data: [
-		        {
-		          "placeId":  place.id,
-		          "category": "lgbt",
-		          "vote":     vote
-		        }
-		      ]
-		    };
+      let url = API.url + '/reviews';
+      let data = {
+        data: [
+          {
+            "placeId":  place.id,
+            "category": "lgbt",
+            "vote":     vote
+          }
+        ]
+      };
 
-		    $.post(url, data, null, 'json')
-		      .done(function (response) {
-				$('.thank-you', infoBox).show();
-		      });
-		});
-	}
+      $.post(url, data, null, 'json')
+        .done(function (response) {
+          $('.thank-you', infoBox).show();
+          let placeId = place.id;
+          place.ratings.lgbt.upAmount = response[placeId].ratings.lgbt.upAmount;
+          place.ratings.lgbt.downAmount = response[placeId].ratings.lgbt.downAmount;
+          map.updateRatings(place, infoBox);
+          infoBox.addClass('voted');
+        });
+    });
+  }
 }
 
 window.map = new Map(document.getElementById('map'));
