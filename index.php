@@ -44,6 +44,10 @@ if (preg_match('/\/(img)\/.*\.(.*)$/', $_SERVER['PHP_SELF'], $matches)) {
             $contentType = 'image/jpeg';
             break;
 
+        case 'png';
+            $contentType = 'image/png';
+            break;
+
         default:
             throw new \LogicException('Unknown image file extension - ' . $fileExtension);
     }
