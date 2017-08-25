@@ -1,6 +1,31 @@
 <?php
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Http\Response;
+
+// Serve up static CSS/JS files
+if (preg_match('/\/(css|js)\//', $_SERVER['PHP_SELF'], $matches)) {
+    if (!file_exists(__DIR__ . '/public' . $_SERVER['PHP_SELF'])) {
+        echo $matches[1] . ' file not found - ' . $_SERVER['PHP_SELF'];
+    }
+
+    $content = file_get_contents(__DIR__ . '/public' . $_SERVER['PHP_SELF']);
+    header('Content-type: text/' . $matches[1], true);
+    echo $content;
+    die;
+}
+
+// Serve up static image files
+if (preg_match('/\/(img)\/.*\.(.*)$/', $_SERVER['PHP_SELF'], $matches)) {
+    if (!file_exists(__DIR__ . '/public' . $_SERVER['PHP_SELF'])) {
+        echo $matches[1] . ' file not found - ' . $_SERVER['PHP_SELF'];
+    }
+
+    $content = file_get_contents(__DIR__ . '/public' . $_SERVER['PHP_SELF']);
+    header('Content-type: image/' . $matches[2], true);
+    echo $content;
+    die;
+}
 
 require 'vendor/autoload.php';
 
@@ -17,6 +42,7 @@ $container['view'] = function ($container) {
     return new \Slim\Views\PhpRenderer('public');
 };
 
+
 $app->get('/', function ($request, $response, $args) {
     return $this->view->render($response, 'index.html');
 })->setName('index');
@@ -26,22 +52,24 @@ $app->get('/api/reviews', function (Request $request, Response $response, $args)
     $db = new PDO('sqlite:db/database.db');
     $ratings = new TeamChris\App($db);
 
-    if (isset($params['place_ids']) && isset($params['categories'])) {
 
-        array_map(function ($item) {
-            return htmlspecialchars($item);
-        }, $params['place_ids']);
 
-        array_map(function ($item) {
-            return htmlspecialchars($item);
-        }, $params['categories']);
-        $result = $ratings->checkPlaces(['placeIds' => $params['place_ids'], 'categories' => $params['categories']]);
+    $missingParams = [];
+    foreach (['placeIds', 'categories'] as $key) {
+        if (!isset($params[$key])) {
+            $missingParams[] = $key;
+        }
+    }
+
+    if (empty($missingParams)) {
+
+        $result = $ratings->checkPlaces(['placeIds' => $params['placeIds'], 'categories' => $params['categories']]);
 
         return $response->withStatus(200)
             ->withJson($result);
     } else {
         return $response->withStatus(400)
-            ->withJson(['message' => 'error']);
+            ->withJson(['message' => 'Error: Missing required params... ' . implode(', ', $missingParams)]);
     }
 });
 
@@ -50,18 +78,33 @@ $app->post('/api/reviews', function (Request $request, Response $response, $args
     $db = new PDO('sqlite:db/database.db');
     $ratings = new TeamChris\App($db);
 
-    $data = $request->getParsedBody();
+    $body = $request->getParsedBody();
 
-    if (isset($data['placeId']) && isset($data['category']) && isset($data['rating'])) {
-        filter_var($data['placeId'], FILTER_SANITIZE_STRING);
-        filter_var($data['category'], FILTER_SANITIZE_STRING);
-        filter_var($data['rating'], FILTER_SANITIZE_NUMBER_INT);
-        $answer = $ratings->rateAPlace($data['placeId'], $data['category'], $data['rating']);
+    // @todo Update this to handle all the posted resports, not just the first one
+    $data = $body['data'][0];
+
+    $missingFields = [];
+    foreach (['placeId', 'category', 'vote'] as $key) {
+        if (!isset($data[$key])) {
+            $missingFields[] = $key;
+        }
+    }
+
+
+    if (empty($missingFields)) {
+        [
+            'placeId'  => $placeId,
+            'category' => $category,
+            'vote'     => $vote,
+        ] = $data;
+
+        $answer = $ratings->rateAPlace($placeId, $category, $vote);
+
         return $response->withStatus(200)
             ->withJson($answer);
     } else {
         return $response->withStatus(400)
-            ->withJson(['message' => 'error']);
+            ->withJson(['message' => 'Error: Missing require fields... ' . implode(', ', $missingFields)]);
     }
 });
 

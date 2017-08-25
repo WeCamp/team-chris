@@ -82,7 +82,7 @@ class App
         $placeIds = $request['placeIds'];
         $result = [];
         foreach ($placeIds as $placeId) {
-            array_push($result, ['placeId' => $placeId, 'ratings' => $this->countRatings($placeId, $categories)]);
+            $result[$placeId] = ['placeId' => $placeId, 'ratings' => $this->countRatings($placeId, $categories)];
         }
 
         return $result;
