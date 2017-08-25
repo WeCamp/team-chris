@@ -6,7 +6,6 @@
     './css/style.css',
     './img/search.png',
     './js/bundle.js',
-    'https://maps.googleapis.com/maps/api/js?key=AIzaSyDcyPKK0R-yKJugZ-RYguIKfr6ZgjB-81o&callback=map.initializeMap&libraries=places'
   ];
 
   self.addEventListener('install', event => {
@@ -29,18 +28,30 @@
   self.addEventListener('fetch', event => {
     console.log('SW serving the asset ' + event.request.url);
 
-    if (event.request.url.match(/^chrome-extension:\/\//)) {
+    let request = event.request;
+
+    if (request.url.match(/^chrome-extension:\/\//)) {
       console.log('Ignoring extension file');
       return;
     }
 
-    event.respondWith(fromCache(event.request));
+    if (!request.url.match(/^http:\/\/localhost:8888/)) {
+      console.log('Ignoring non-local file');
+      return;
+    }
+
+    if ('post' !== request.method) {
+      console.log('Don\'t cache POST requests');
+      return;
+    }
+
+    event.respondWith(fromCache(request));
 
     event.waitUntil(
-      update(event.request)
+      update(request)
         .then(refresh)
         .catch(err => {
-          console.log('Update error - ' + err);
+          console.error('Update error ', err);
         })
     );
   });
