@@ -108,6 +108,9 @@ function Map(element) {
 
     	$(infoBox).addClass('show');
     	mobileAnimation(infoBox);
+
+    	var thankYou = $('.thank-you', infoBox);
+		thankYou.hide();
     };
 
     var mobileAnimation = function(infoBox) {
@@ -143,6 +146,7 @@ function Search(map) {
 			event.preventDefault();
 			var formContent = getFormContent();
 			map.updateMap(formContent.searchInputValue);
+			$('#info-box').removeClass('show');
 		});
 	};
 
@@ -158,32 +162,40 @@ function Search(map) {
 }
 
 function Voter (element) {
-	$('.up, .down', element).on('click', function() {
-		var infoBox = $(this).closest('#info-box');
-		var place = $(infoBox).data('place');
+	var scope = this;
+	
+	this.castVote = function() {
+		$('.up, .down', element).on('click', function() {
+			var infoBox = $(this).closest('#info-box');
+			var place = $(infoBox).data('place');
 
-		console.log(place);
+			console.log(place);
 
-		var vote = 1;
-		
-		if ($(this).hasClass('down')) {
-			vote = -1;
-		}
+			var vote = 1;
+			
+			if ($(this).hasClass('down')) {
+				vote = -1;
+			}
 
-		$.post({
-			url: API.url + '/reviews',
-			data: [
-				{
-					"placeId": place.id,
-					"category": "lgbt",
-					"vote": vote
-				}
-			]
-		})
-	});
+			$.post({
+				url: API.url + '/reviews',
+				data: [
+					{
+						"placeId": place.id,
+						"category": "lgbt",
+						"vote": vote
+					}
+				]
+			});
+
+			var thankYou = $('.thank-you', infoBox);
+			thankYou.show();
+		});
+	}
 }
 
 var map = new Map(document.getElementById('map'));
 var search = new Search(map);
 search.submitForm();
 var voter = new Voter(document.getElementById('rate'));
+voter.castVote();
