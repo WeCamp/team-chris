@@ -4,7 +4,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Http\Response;
 
 // Serve up static CSS/JS files
-if (preg_match('/\.(css|js)$/', $_SERVER['PHP_SELF'], $matches)) {
+if (preg_match('/\.(css|js|json)$/', $_SERVER['PHP_SELF'], $matches)) {
     $fileExtension = $matches[1];
 
     if (!file_exists(__DIR__ . '/public' . $_SERVER['PHP_SELF'])) {
@@ -14,6 +14,10 @@ if (preg_match('/\.(css|js)$/', $_SERVER['PHP_SELF'], $matches)) {
     switch ($fileExtension) {
         case 'js';
             $contentType = 'application/javascript';
+            break;
+
+        case 'json';
+            $contentType = 'application/json';
             break;
 
         case 'css';
