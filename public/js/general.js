@@ -204,13 +204,10 @@ function Search (map) {
 		});
 	};
 
-  	let getFormContent = function () {
-
-    formContent = {
+  let getFormContent = function () {
+    return {
       searchInputValue: searchForm.find('#search').val(),
     };
-
-    return formContent;
   };
 
 }
