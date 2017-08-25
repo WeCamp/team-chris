@@ -79,7 +79,6 @@ function Map (element) {
 
         $.each(places, function (i, place) {
           let placeId = place.id;
-          console.log('placeId:', placeId);
           if ('undefined' !== typeof(response[placeId])) {
             place.ratings = response[placeId].ratings;
           } else {
@@ -91,12 +90,10 @@ function Map (element) {
   };
 
   let removeMarkers = function() {
-  	 console.log(markers);
   	 for (var i = 0; i < markers.length; i++) {
        markers[i].setMap(null);
      }
   	 markers = [];
-  	 console.log(markers);
   }
 
   let createMarker = function (place) {
