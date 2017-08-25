@@ -1,4 +1,5 @@
-var map
+import debounce from "lodash.debounce";
+
 let googleMap;
 let API = {
   url: '/api'
@@ -27,7 +28,8 @@ function Map (element) {
       center: {lat: lat, lng: lng},
       zoom:   13
     });
-    googleMap.addListener("bounds_changed", getBusinesses);
+
+    googleMap.addListener("bounds_changed", debounce(getBusinesses, 500));
   }
 
   this.updateMap = function (address) {
@@ -228,7 +230,8 @@ function Voter (element) {
   });
 }
 
-map = new Map(document.getElementById('map'));
+window.map = new Map(document.getElementById('map'));
 let search = new Search(map);
 search.submitForm();
-let voter = new Voter(document.getElementById('rate'));
+
+new Voter(document.getElementById('rate'));
