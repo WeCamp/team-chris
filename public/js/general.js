@@ -148,6 +148,8 @@ function Map(element) {
 
         scope.updateRatings(place, infoBox);
 
+        infoBox.removeClass('voted');
+
         $(infoBox).addClass('show');
         mobileAnimation(infoBox);
 
@@ -242,8 +244,11 @@ function Voter(element) {
             $.post(url, data, null, 'json')
                 .done(function (response) {
                     $('.thank-you', infoBox).show();
+                    let placeId = place.id;
+                    place.ratings.lgbt.upAmount = response[placeId].ratings.lgbt.upAmount;
+                    place.ratings.lgbt.downAmount = response[placeId].ratings.lgbt.downAmount;
                     map.updateRatings(place, infoBox);
-                    console.log(response);
+                    infoBox.addClass('voted');
                 });
         });
     }

@@ -34,7 +34,16 @@ class App
 
             $stm->execute($data);
 
-            return $this->getRating($this->db->lastInsertId());
+            $returnArray = $this->getRating($this->db->lastInsertId());
+
+            $addedData = $this->checkPlaces(['placeIds' => [$placeId], 'categories' => [$category]]);
+
+            $returnArray['rating'] = $returnArray['rating'] == 1 ? $returnArray['rating'] + $addedData[$placeId]['ratings'][$category]['upAmount'] :
+                0 - $returnArray['rating'] - $addedData[$placeId]['ratings'][$category]['downAmount'];
+            //var_dump($addedData[$placeId]['ratings'][$category]);
+            //var_dump($returnArray);
+            return $addedData;
+
         } catch (\PDOException $e) {
             $error = new Error('400', $e->getMessage());
             return $error;
