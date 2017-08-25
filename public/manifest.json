@@ -1,0 +1,22 @@
+{
+  "short_name": "Me:al",
+  "name": "A nice LGBT friendly restaurants list that you can vote them based on their friendliness",
+  "icons": [
+    {
+      "src": "./img/icons/icon-1x.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "./img/icons/icon-2x.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "./img/icons/icon-4x.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/"
+}
