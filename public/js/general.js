@@ -5,7 +5,7 @@ let API = {
   url: '/api'
 };
 
-function Map (element) {
+function Map(element) {
 
   let scope = this;
   let placesApi;
@@ -28,7 +28,7 @@ function Map (element) {
   let displayMap = function (lat, lng) {
     googleMap = new google.maps.Map(element, {
       center: {lat: lat, lng: lng},
-      zoom:   13
+      zoom: 13
     });
 
     googleMap.addListener("bounds_changed", debounce(getBusinesses, 500));
@@ -55,9 +55,9 @@ function Map (element) {
       placesApi = new google.maps.places.PlacesService(googleMap);
     }
     let request = {
-      query:  "",
+      query: "",
       bounds: googleMap.getBounds(),
-      type:   "restaurant"
+      type: "restaurant"
     };
     placesApi.textSearch(request, displayBusinesses);
   };
@@ -103,14 +103,25 @@ function Map (element) {
   }
 
   let createMarker = function (place) {
-    let image = {
-      url:        place.icon,
-      size:       new google.maps.Size(25, 25),
-      scaledSize: new google.maps.Size(25, 25),
+
+    var iconBase = '../img/';
+    var icons = {
+      noRating: {
+        icon: iconBase + 'noRating.png'
+      },
+      lowRating: {
+        icon: iconBase + 'lowRating.png'
+      },
+      highRating: {
+        icon: iconBase + 'highRating.png'
+      }
     };
+
+    let image = getImage(place, icons);
+    //console.log(image);
     let marker = new google.maps.Marker({
-      map:      googleMap,
-      icon:     image,
+      map: googleMap,
+      icon: image,
       position: place.geometry.location
     });
     markers.push(marker);
@@ -118,7 +129,30 @@ function Map (element) {
     addInfoWindow(place, marker);
 
     marker.addListener('click', showBusinessDetails);
-  }
+  };
+
+  let getImage = function(place, icons) {
+    let upAmount = place.ratings.lgbt.upAmount;
+    let downAmount = place.ratings.lgbt.downAmount;
+    let totalVotes = Number(upAmount) + Number(downAmount);
+    let rating = Math.round((upAmount / totalVotes) * 100);
+
+    let ratingUrl;
+
+    if (rating > 55) {
+      ratingUrl = icons.highRating.icon;
+    } else if (rating <= 55) {
+      ratingUrl = icons.lowRating.icon;
+    } else {
+      ratingUrl = icons.noRating.icon;
+    }
+    let image = {
+      url: ratingUrl,
+      size: new google.maps.Size(25, 25),
+      scaledSize: new google.maps.Size(25, 25),
+    };
+    return image;
+  };
 
   let addInfoWindow = function (place, marker) {
     let infoWindow = new google.maps.InfoWindow({
@@ -199,7 +233,7 @@ function Map (element) {
   };
 }
 
-function Search (map) {
+function Search(map) {
 
   let searchForm = $('#search-form');
 
@@ -219,7 +253,7 @@ function Search (map) {
   };
 }
 
-function Voter (element) {
+function Voter(element) {
 
   this.addCastVoteHandlers = function () {
     $('.up, .down', element).on('click', function () {
@@ -236,9 +270,9 @@ function Voter (element) {
       let data = {
         data: [
           {
-            "placeId":  place.id,
+            "placeId": place.id,
             "category": "lgbt",
-            "vote":     vote
+            "vote": vote
           }
         ]
       };
