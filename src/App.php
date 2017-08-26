@@ -24,24 +24,17 @@ class App
 
             $stm = $this->db->prepare($insert);
 
-            //$stm->bindParam(':place_id', $placeId, \PDO::PARAM_STR);
-            //$stm->bindParam(':category', $category, \PDO::PARAM_STR);
-            //$stm->bindParam(':rating', $rating, \PDO::PARAM_INT);
-
             $data['place_id'] = $placeId;
             $data['category'] = $category;
             $data['rating'] = $rating;
 
             $stm->execute($data);
 
-            $returnArray = $this->getRating($this->db->lastInsertId());
+            //it was like this before we changed the response
+            //$returnArray = $this->getRating($this->db->lastInsertId());
 
             $addedData = $this->checkPlaces(['placeIds' => [$placeId], 'categories' => [$category]]);
 
-            $returnArray['rating'] = $returnArray['rating'] == 1 ? $returnArray['rating'] + $addedData[$placeId]['ratings'][$category]['upAmount'] :
-                0 - $returnArray['rating'] - $addedData[$placeId]['ratings'][$category]['downAmount'];
-            //var_dump($addedData[$placeId]['ratings'][$category]);
-            //var_dump($returnArray);
             return $addedData;
 
         } catch (\PDOException $e) {
