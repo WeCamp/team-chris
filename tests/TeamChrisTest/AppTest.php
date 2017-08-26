@@ -8,16 +8,11 @@ use TeamChris\App;
 class AppTest extends \PHPUnit\Framework\TestCase
 {
     private $placeId;
-    private $rating = ['category' => 'LGBT', 'upAmount' => 0, 'downAmount' => 0];
 
-    /**
-     * @var PDO
-     */
+    /** @var PDO */
     private $db;
 
-    /**
-     * @var App
-     */
+    /** @var App */
     private $app;
 
     protected function setUp()
