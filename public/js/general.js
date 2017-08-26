@@ -43,6 +43,7 @@ function Map (element) {
     geocoder.geocode({'address': address}, function (results, status) {
       if (status === 'OK') {
         googleMap.setCenter(results[0].geometry.location);
+        googleMap.fitBounds(results[0].geometry.bounds);
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
       }
