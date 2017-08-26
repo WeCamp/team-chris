@@ -116,7 +116,7 @@ function Map(element) {
         };
 
         let image = getImage(place, icons);
-        
+        //console.log(image);
         let marker = new google.maps.Marker({
             map: googleMap,
             icon: image,
@@ -127,28 +127,30 @@ function Map(element) {
         addInfoWindow(place, marker);
 
         marker.addListener('click', showBusinessDetails);
-    }
+    };
 
     let getImage = function(place, icons) {
     	let upAmount = place.ratings.lgbt.upAmount;
         let downAmount = place.ratings.lgbt.downAmount;
+        let totalVotes = Number(upAmount) + Number(downAmount);
         let rating = Math.round((upAmount / totalVotes) * 100);
+
         let ratingUrl;
 
-        if (rating > 5)) {
-            ratingUrl = icons[place.highRating].icon;
-        } else if (rating <= 5) {
-			ratingUrl = icons[place.lowRating].icon;
+        if (rating > 55) {
+            ratingUrl = icons.highRating.icon;
+        } else if (rating <= 55) {
+			ratingUrl = icons.lowRating.icon;
         } else {
-			ratingUrl = icons[place.noRating].icon;
+			ratingUrl = icons.noRating.icon;
         }
-
-    	return image = {
-            url: icons[ratingUrl].icon,
+        let image = {
+            url: ratingUrl,
             size: new google.maps.Size(25, 25),
             scaledSize: new google.maps.Size(25, 25),
         };
-    }
+    	return image;
+    };
 
     let addInfoWindow = function (place, marker) {
         let infoWindow = new google.maps.InfoWindow({
