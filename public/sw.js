@@ -9,7 +9,7 @@
   ];
 
   self.addEventListener('install', event => {
-    console.log('Installing service worker');
+    // console.log('Installing service worker');
 
     event.waitUntil(
       caches.open(CACHE)
@@ -22,26 +22,26 @@
   });
 
   self.addEventListener('activate', event => {
-    console.log('Now ready to handle fetches!');
+    // console.log('Now ready to handle fetches!');
   });
 
   self.addEventListener('fetch', event => {
-    console.log('SW serving the asset ' + event.request.url);
+    // console.log('SW serving the asset ' + event.request.url);
 
     let request = event.request;
 
     if (request.url.match(/^chrome-extension:\/\//)) {
-      console.log('Ignoring extension file');
+      // console.log('Ignoring extension file');
       return;
     }
 
     if (!request.url.match(/^http:\/\/localhost:8888/)) {
-      console.log('Ignoring non-local file');
+      // console.log('Ignoring non-local file');
       return;
     }
 
     if ('post' !== request.method) {
-      console.log('Don\'t cache POST requests');
+      // console.log('Don\'t cache POST requests');
       return;
     }
 
@@ -51,7 +51,7 @@
       update(request)
         .then(refresh)
         .catch(err => {
-          console.error('Update error ', err);
+          // console.error('Update error ', err);
         })
     );
   });
@@ -70,7 +70,7 @@
         return cache.match(request);
       })
       .catch(err => {
-        console.log(err, arguments);
+        // console.log(err, arguments);
       });
   }
 

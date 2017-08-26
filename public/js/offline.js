@@ -1,6 +1,6 @@
 (function () {
   if (!navigator.serviceWorker) {
-    console.log('Service workers not supported');
+    // console.log('Service workers not supported');
     return
   }
   navigator.serviceWorker.register('../sw.js')
