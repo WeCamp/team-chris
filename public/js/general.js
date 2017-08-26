@@ -35,6 +35,10 @@ function Map (element) {
   }
 
   this.updateMap = function (address) {
+    if (!googleMap) {
+      console.log('Map not setup yet');
+      return;
+    }
     let geocoder = new google.maps.Geocoder();
     geocoder.geocode({'address': address}, function (results, status) {
       if (status === 'OK') {
