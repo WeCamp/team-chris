@@ -135,7 +135,7 @@ function Map(element) {
         let rating = Math.round((upAmount / totalVotes) * 100);
         let ratingUrl;
 
-        if (rating > 5)) {
+        if (rating > 5) {
             ratingUrl = icons[place.highRating].icon;
         } else if (rating <= 5) {
 			ratingUrl = icons[place.lowRating].icon;
